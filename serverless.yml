@@ -47,6 +47,12 @@ functions:
       - httpApi:
           path: /login
           method: post
+  getProtectedData:
+    handler: handlers/getProtectedData.getProtectedData
+    events:
+      - http:
+          path: /protected
+          method: get
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
