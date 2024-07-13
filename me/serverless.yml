@@ -10,11 +10,11 @@ provider:
   region: ap-northeast-2  # 서울 리전
 
 functions:
-  hello:
-    handler: handler.hello
+  getAllQuestions:
+    handler: handlers/getAllQuestions.getAllQuestions
     events:
       - httpApi:
-          path: /hello
+          path: /questions
           method: get
 
 plugins:
