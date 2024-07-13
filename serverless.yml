@@ -41,6 +41,12 @@ functions:
           path: /register
           method: post
 
+  login:
+    handler: handlers/login.login
+    events:
+      - httpApi:
+          path: /login
+          method: post
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
