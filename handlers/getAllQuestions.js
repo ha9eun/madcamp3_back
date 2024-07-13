@@ -10,14 +10,29 @@ const dbConfig = {
   database: process.env.DB_NAME,
 };
 
-const connection = mysql.createConnection(dbConfig);
+let connection;
+
+const connectToDatabase = () => {
+  if (!connection) {
+    connection = mysql.createConnection(dbConfig);
+    connection.connect((err) => {
+      if (err) {
+        console.error('Error connecting to the database:', err);
+        process.exit(1);
+      }
+    });
+  }
+  return connection;
+};
 
 module.exports.getAllQuestions = async (event) => {
-  const query = 'SELECT * FROM questions';
+  const query = 'SELECT * FROM Questions';
+  connectToDatabase();
 
   return new Promise((resolve, reject) => {
     connection.query(query, (error, results) => {
       if (error) {
+        console.error('Error executing query:', JSON.stringify(error, null, 2));
         reject({
           statusCode: 500,
           body: JSON.stringify({
