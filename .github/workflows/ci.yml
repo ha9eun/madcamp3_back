@@ -33,7 +33,8 @@ jobs:
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-
+          ecgi "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+ 
       - name: Deploy with Serverless
         run: npx serverless deploy
         

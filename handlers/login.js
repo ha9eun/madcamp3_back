@@ -1,6 +1,7 @@
 'use strict';
 
 const { connectToDatabase } = require('../lib/db');
+const jwt = require('jsonwebtoken');
 
 module.exports.login = async (event) => {
   const { userId, password } = JSON.parse(event.body);
@@ -40,12 +41,16 @@ module.exports.login = async (event) => {
         const user = results[0];
 
         if (password === user.password) {
-        resolve({
-          statusCode: 200,
-          body: JSON.stringify({
-            message: 'Login successful'
-          }),
+          const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+          });
 
+          resolve({
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'Login successful',
+              token,
+            }),
         });
         } else {
           resolve({
