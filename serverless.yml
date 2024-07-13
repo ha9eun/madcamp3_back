@@ -9,6 +9,13 @@ provider:
   runtime: nodejs20.x
   region: ap-northeast-2  # 서울 리전
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "rds:*"
+        - "secretsmanager:GetSecretValue"
+      Resource: "*"
+
 functions:
   getAllQuestions:
     handler: handlers/getAllQuestions.getAllQuestions
