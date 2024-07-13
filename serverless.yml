@@ -34,5 +34,12 @@ functions:
           path: /questions
           method: get
 
+  registerUser:
+    handler: handlers/registerUser.registerUser
+    events:
+      - httpApi:
+          path: /register
+          method: post
+
 plugins:
   - serverless-offline
