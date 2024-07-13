@@ -31,7 +31,7 @@ const connectToDatabase = () => {
 };
 
 module.exports.getAllQuestions = async (event) => {
-  const query = 'SELECT * FROM Questions';
+  const query = 'SELECT * FROM questions';
   connectToDatabase();
 
   return new Promise((resolve, reject) => {
