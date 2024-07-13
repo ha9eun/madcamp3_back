@@ -9,6 +9,12 @@ provider:
   runtime: nodejs20.x
   region: ap-northeast-2  # 서울 리전
   
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+  
   vpc:
     securityGroupIds:
       - sg-07eacae6d3855c5fb
@@ -17,7 +23,7 @@ provider:
       - subnet-00b5a3ea6c6e205b5
       - subnet-045b84f9deb5c8e1d
       - subnet-0524571fc57e5ec69
-
+  
   
   iamRoleStatements:
     - Effect: "Allow"
@@ -43,3 +49,4 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-dotenv-plugin
