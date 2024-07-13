@@ -38,7 +38,7 @@ functions:
     handler: handlers/registerUser.registerUser
     events:
       - httpApi:
-          path: /register
+          path: /users
           method: post
 
   login:
