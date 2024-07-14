@@ -5,7 +5,7 @@ const { verifyToken } = require('../lib/verifyToken');
 
 module.exports.getUserInfo = async (event) => {
   const token = event.headers.Authorization || event.headers.authorization;
-
+    console.log("token: ",token);
   if (!token) {
     return {
       statusCode: 401,
@@ -16,7 +16,7 @@ module.exports.getUserInfo = async (event) => {
   }
 
   const decoded = verifyToken(token);
-
+  console.log("decoded: ",decoded);
   if (!decoded) {
     return {
       statusCode: 401,
