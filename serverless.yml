@@ -89,7 +89,12 @@ functions:
       - httpApi:
           path: /users/me
           method: get
-  
+  updateUserInfo:
+    handler: handlers/updateUserInfo.updateUserInfo
+    events:
+      - httpApi:
+          path: /users/me
+          method: put
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
