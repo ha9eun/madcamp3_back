@@ -65,6 +65,12 @@ functions:
       - httpApi:
           path: /answers
           method: post
+  updateAnswer:
+    handler: handlers/updateAnswer.updateAnswer
+    events:
+      - httpApi:
+          path: /answers/{answer_id}
+          method: put
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
