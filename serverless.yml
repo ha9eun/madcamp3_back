@@ -50,8 +50,14 @@ functions:
   getProtectedData:
     handler: handlers/getProtectedData.getProtectedData
     events:
-      - http:
+      - httpApi:
           path: /protected
+          method: get
+  getTodayQuestion:
+    handler: handlers/getTodayQuestion.getTodayQuestion
+    events:
+      - httpApi:
+          path: /questions/today
           method: get
 plugins:
   - serverless-offline
