@@ -83,6 +83,12 @@ functions:
       - httpApi:
           path: /users
           method: get
+  getUserInfo:
+    handler: handlers/getUserInfo.getUserInfo
+    events:
+      - httpApi:
+          path: /users/me
+          method: get
   
 plugins:
   - serverless-offline
