@@ -15,7 +15,7 @@ module.exports.getUserInfo = async (event) => {
     };
   }
 
-  const decoded = verifyToken(token);
+  const decoded = verifyToken(token.split(' ')[1]);
   console.log("decoded: ",decoded);
   if (!decoded) {
     return {
