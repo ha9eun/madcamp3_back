@@ -77,6 +77,12 @@ functions:
       - httpApi:
           path: /answers/{answerId}
           method: delete
+  getAllUsers:
+    handler: handlers/getAllUsers.getAllUsers
+    events:
+      - httpApi:
+          path: /users
+          method: get
   
 plugins:
   - serverless-offline
