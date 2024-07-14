@@ -107,6 +107,12 @@ functions:
       - httpApi:
           path: /users/me/colors
           method: get
+  getUserAnswers:
+    handler: handlers/getUserAnswers
+    events:
+      - httpApi:
+          path: /answers
+          method: get
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin

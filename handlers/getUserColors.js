@@ -28,7 +28,7 @@ module.exports.getUserColors = async (event) => {
   }
 
   const query = `
-    SELECT answer_id, color
+    SELECT answer_id, color, date
     FROM answers
     WHERE user_id = ?
   `;
