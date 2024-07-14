@@ -59,6 +59,12 @@ functions:
       - httpApi:
           path: /questions/today
           method: get
+  addAnswer:
+    handler: handlers/addAnswer.addAnswer
+    events:
+      - httpApi:
+          path: /answers
+          method: post
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
