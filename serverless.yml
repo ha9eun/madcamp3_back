@@ -69,8 +69,15 @@ functions:
     handler: handlers/updateAnswer.updateAnswer
     events:
       - httpApi:
-          path: /answers/{answer_id}
+          path: /answers/{answerId}
           method: put
+  deleteAnswer:
+    handler: handlers/deleteAnswer.deleteAnswer
+    events:
+      - httpApi:
+          path: /answers/{answerId}
+          method: delete
+  
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
