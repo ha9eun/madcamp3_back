@@ -95,6 +95,18 @@ functions:
       - httpApi:
           path: /users/me
           method: put
+  getUserKeywords:
+    handler: handlers/getUserKeywords.getUserKeywords
+    events:
+      - httpApi:
+          path: /users/me/keywords
+          method: get
+  getUserColors:
+    handler: handlers/getUserColors.getUserColors
+    events:
+      - httpApi:
+          path: /users/me/colors
+          method: get
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
