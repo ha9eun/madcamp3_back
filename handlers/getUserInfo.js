@@ -26,7 +26,7 @@ module.exports.getUserInfo = async (event) => {
     };
   }
 
-  const query = 'SELECT user_id, nickname FROM users WHERE user_id = ?';
+  const query = 'SELECT * FROM users WHERE user_id = ?';
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
