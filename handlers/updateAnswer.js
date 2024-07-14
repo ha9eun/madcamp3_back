@@ -28,8 +28,7 @@ module.exports.updateAnswer = async (event) => {
 
   const { color, answer, visibility } = JSON.parse(event.body);
   const { answerId } = event.pathParameters;
-
-  if (!answerId || color === undefined || answer === undefined || visibility === undefined) {
+  if (!answerId || !color|| !answer || !visibility) {
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -38,11 +37,11 @@ module.exports.updateAnswer = async (event) => {
     };
   }
 
-  const query = 'UPDATE answers SET color = ?, answer = ?, visibility = ? WHERE answer_id = ? AND user_id = ?';
+  const query = 'UPDATE answers SET color = ?, answer = ?, visibility = ? WHERE answer_id = ?';
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
-    connection.query(query, [color, answer, visibility, answerId, decoded.userId], (error, results) => {
+    connection.query(query, [color, answer, visibility, answerId], (error, results) => {
       if (error) {
         console.error('Error executing query:', JSON.stringify(error, null, 2));
         reject({
