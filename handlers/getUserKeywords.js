@@ -42,7 +42,7 @@ module.exports.getUserKeywords = async (event) => {
         reject({
           statusCode: 500,
           body: JSON.stringify({
-            message: 'Error retrieving user keywords and colors',
+            message: 'Error retrieving user keywords',
             error: error.message,
           }),
         });

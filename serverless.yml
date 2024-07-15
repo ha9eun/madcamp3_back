@@ -131,6 +131,12 @@ functions:
       - httpApi:
           path: /users/me/following
           method: get
+  addFriend:
+    handler: handlers/addFriend.addFriend
+    events:
+      - httpApi:
+          path: /friends
+          method: post
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin

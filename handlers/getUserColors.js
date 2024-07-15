@@ -41,7 +41,7 @@ module.exports.getUserColors = async (event) => {
         reject({
           statusCode: 500,
           body: JSON.stringify({
-            message: 'Error retrieving user keywords and colors',
+            message: 'Error retrieving user colors',
             error: error.message,
           }),
         });
