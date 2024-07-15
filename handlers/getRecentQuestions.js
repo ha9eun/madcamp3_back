@@ -4,8 +4,9 @@ const { connectToDatabase } = require('../lib/db');
 
 module.exports.getRecentQuestions = async (event) => {
   // 오늘, 어제, 그저께 날짜를 로컬 시간 기준으로 계산
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // 시간을 0으로 설정하여 자정으로 맞춤
+  const date = new Date();
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  const today = new Date(utc + 9 * 3600000);
 
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
@@ -42,7 +43,7 @@ module.exports.getRecentQuestions = async (event) => {
           }),
         });
       } else {
-        // 결과의 날짜를 로컬 시간대로 변환
+        //결과의 날짜를 로컬 시간대로 변환
         const localResults = results.map(result => {
           const localDate = new Date(result.date);
           result.date = `${localDate.getFullYear()}-${(localDate.getMonth() + 1).toString().padStart(2, '0')}-${localDate.getDate().toString().padStart(2, '0')}`;
