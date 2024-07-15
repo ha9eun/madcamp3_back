@@ -113,6 +113,12 @@ functions:
       - httpApi:
           path: /answers/{answer_id}
           method: get
+  getRandomUserColors:
+    handler: handlers/getRandomUserTrees.getRandomUserTrees
+    events:
+      - httpApi:
+          path: /users/random/trees
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
