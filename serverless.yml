@@ -125,6 +125,12 @@ functions:
       - httpApi:
           path: /answers/user/{user_id}
           method: get
+  getFollowing:
+    handler: handlers/getFollowing.getFollowing
+    events:
+      - httpApi:
+          path: /users/me/following
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
