@@ -28,9 +28,10 @@ module.exports.addAnswer = async (event) => {
 
   const { answer, color, visibility, keywords } = JSON.parse(event.body);
   console.log(keywords);
+  console.log(Array.isArray(keywords), keywords.length);
   if (!answer || !color || !visibility || !keywords || !Array.isArray(keywords) || keywords.length !== 3) {
-    console.log('Validation Error:', { answer, color, visibility, keywords });
-    console.log(Array.isArray(keywords), keywords.length);
+    //console.log('Validation Error:', { answer, color, visibility, keywords });
+    
     return {
       statusCode: 400,
       body: JSON.stringify({
