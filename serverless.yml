@@ -119,6 +119,12 @@ functions:
       - httpApi:
           path: /users/random/trees
           method: get
+  getUserPublicAnswers:
+    handler: handlers/getUserPublicAnswers.getUserPublicAnswers
+    events:
+      - httpApi:
+          path: /answers/user/{user_id}
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
