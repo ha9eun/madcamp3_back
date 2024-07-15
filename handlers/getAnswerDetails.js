@@ -22,18 +22,21 @@ module.exports.getAnswerDetails = async (event) => {
     return {
       statusCode: 403,
       body: JSON.stringify({
-        message: 'Invaild or expired token',
+        message: 'Invalid or expired token',
       }),
     };
   }
+
   const { answer_id } = event.pathParameters;
-  
+
   const query = `
-    SELECT *
-    FROM answers
-    WHERE answer_id = ?
+    SELECT a.*, q.question, k.keyword
+    FROM answers a
+    JOIN questions q ON a.date = q.date
+    LEFT JOIN keywords k ON a.answer_id = k.answer_id
+    WHERE a.answer_id = ?
   `;
-  
+
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
@@ -43,16 +46,34 @@ module.exports.getAnswerDetails = async (event) => {
         reject({
           statusCode: 500,
           body: JSON.stringify({
-            message: 'Error retrieving user keywords and colors',
+            message: 'Error retrieving answer details',
             error: error.message,
           }),
         });
-      } else {
+      } else if (results.length === 0) {
         resolve({
-            statusCode: 200,
-            body: JSON.stringify(results),
-          });
-        }
-      });
+          statusCode: 404,
+          body: JSON.stringify({
+            message: 'Answer not found',
+          }),
+        });
+      } else {
+        const answer = {
+          answer_id: results[0].answer_id,
+          date: results[0].date,
+          user_id: results[0].user_id,
+          answer: results[0].answer,
+          color: results[0].color,
+          visibility: results[0].visibility,
+          question: results[0].question,
+          keywords: results.filter(row => row.keyword).map(row => row.keyword),
+        };
+
+        resolve({
+          statusCode: 200,
+          body: JSON.stringify(answer),
+        });
+      }
     });
+  });
 };
