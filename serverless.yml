@@ -167,6 +167,12 @@ functions:
       - httpApi:
           path: /answers/recent
           method: get
+  getRecentQuestions:
+    handler: handlers/getRecentQuestions.getRecentQuestions
+    events:
+      - httpApi:
+          path: /questions/recent
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
