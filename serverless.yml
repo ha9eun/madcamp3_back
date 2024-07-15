@@ -149,6 +149,12 @@ functions:
       - httpApi:
           path: /likes/{answer_id}
           method: post
+  deleteLike:
+    handler: handlers/deleteLike.deleteLike
+    events:
+      - httpApi:
+          path: /likes/{answer_id}
+          method: delete
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
