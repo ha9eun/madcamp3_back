@@ -19,7 +19,7 @@ module.exports.updateUserInfo = async (event) => {
 
   if (!decoded) {
     return {
-      statusCode: 401,
+      statusCode: 403,
       body: JSON.stringify({
         message: 'Invalid or expired token',
       }),

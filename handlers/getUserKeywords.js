@@ -10,7 +10,7 @@ module.exports.getUserKeywords = async (event) => {
     return {
       statusCode: 401,
       body: JSON.stringify({
-        message: 'Unauthorized',
+        message: 'Authorization token is required',
       }),
     };
   }
@@ -20,9 +20,9 @@ module.exports.getUserKeywords = async (event) => {
     decoded = verifyToken(token.split(' ')[1]);
   } catch (error) {
     return {
-      statusCode: 401,
+      statusCode: 403,
       body: JSON.stringify({
-        message: 'Unauthorized',
+        message: 'Invalied or expired token',
       }),
     };
   }

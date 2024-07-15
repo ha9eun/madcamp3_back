@@ -10,7 +10,7 @@ module.exports.getUserColors = async (event) => {
     return {
       statusCode: 401,
       body: JSON.stringify({
-        message: 'Unauthorized',
+        message: 'Authorization token is required',
       }),
     };
   }
@@ -20,9 +20,9 @@ module.exports.getUserColors = async (event) => {
     decoded = verifyToken(token.split(' ')[1]);
   } catch (error) {
     return {
-      statusCode: 401,
+      statusCode: 403,
       body: JSON.stringify({
-        message: 'Unauthorized',
+        message: 'Invalid or expired token',
       }),
     };
   }

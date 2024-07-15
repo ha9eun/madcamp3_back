@@ -19,7 +19,7 @@ module.exports.getUserInfo = async (event) => {
   console.log("decoded: ",decoded);
   if (!decoded) {
     return {
-      statusCode: 401,
+      statusCode: 403,
       body: JSON.stringify({
         message: 'Invalid or expired token',
       }),
