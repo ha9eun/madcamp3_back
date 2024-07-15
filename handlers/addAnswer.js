@@ -27,7 +27,7 @@ module.exports.addAnswer = async (event) => {
   }
 
   const { answer, color, visibility, keywords } = JSON.parse(event.body);
-
+  console.log(keywords);
   if (!answer || !color || !visibility || !keywords || !Array.isArray(keywords) || keywords.length !== 3) {
     return {
       statusCode: 400,
