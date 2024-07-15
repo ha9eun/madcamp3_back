@@ -155,6 +155,12 @@ functions:
       - httpApi:
           path: /likes/{answer_id}
           method: delete
+  getFriendsTrees:
+    handler: handlers/getFriendsTrees.getFriendsTrees
+    events:
+      - httpApi:
+          path: /friends/trees
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
