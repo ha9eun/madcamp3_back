@@ -161,6 +161,12 @@ functions:
       - httpApi:
           path: /friends/trees
           method: get
+  getRecentAnswers:
+    handler: handlers/getRecentAnswers.getRecentAnswers
+    events:
+      - httpApi:
+          path: /answers/recent
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
