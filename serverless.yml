@@ -143,6 +143,12 @@ functions:
       - httpApi:
           path: /friends
           method: delete
+  addLike:
+    handler: handlers/addLike.addLike
+    events:
+      - httpApi:
+          path: /likes/{answer_id}
+          method: post
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
