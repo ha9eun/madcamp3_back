@@ -137,6 +137,12 @@ functions:
       - httpApi:
           path: /friends
           method: post
+  deleteFriend:
+    handler: handlers/deleteFriend.deleteFriend
+    events:
+      - httpApi:
+          path: /friends
+          method: delete
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
