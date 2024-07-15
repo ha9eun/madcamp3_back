@@ -27,8 +27,7 @@ module.exports.addAnswer = async (event) => {
   }
 
   const { answer, color, visibility, keywords } = JSON.parse(event.body);
-  console.log(keywords);
-  console.log(Array.isArray(keywords), keywords.length);
+  
   if (!answer || !color || !visibility || !keywords || !Array.isArray(keywords) || keywords.length !== 3) {
     //console.log('Validation Error:', { answer, color, visibility, keywords });
     
@@ -42,7 +41,9 @@ module.exports.addAnswer = async (event) => {
 
   const insertAnswerQuery = 'INSERT INTO answers (date, user_id, answer, color, visibility) VALUES (?, ?, ?, ?, ?)';
   const insertKeywordQuery = 'INSERT INTO keywords (answer_id, keyword) VALUES ?';
-  const today = new Date().toISOString().split('T')[0];
+  const date = new Date();
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  const today = new Date(utc + 9 * 3600000);
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
