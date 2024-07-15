@@ -26,41 +26,90 @@ module.exports.addAnswer = async (event) => {
     };
   }
 
-  const { answer, color, visibility } = JSON.parse(event.body);
+  const { answer, color, visibility, keywords } = JSON.parse(event.body);
 
-  if (!answer || !color || !visibility) {
+  if (!answer || !color || !visibility || !keywords || !Array.isArray(keywords) || keywords.length !== 3) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: 'color and visibility and answer are required',
+        message: 'Answer, color, visibility, and exactly 3 keywords are required',
       }),
     };
   }
 
-  const query = 'INSERT INTO answers (date, user_id, answer, color, visibility) VALUES (?, ?, ?, ?, ?)';
+  const insertAnswerQuery = 'INSERT INTO answers (date, user_id, answer, color, visibility) VALUES (?, ?, ?, ?, ?)';
+  const insertKeywordQuery = 'INSERT INTO keywords (answer_id, keyword) VALUES ?';
   const today = new Date().toISOString().split('T')[0];
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
-    connection.query(query, [ today, decoded.userId, answer, color, visibility], (error, results) => {
-      if (error) {
-        console.error('Error executing query:', JSON.stringify(error, null, 2));
-        reject({
+    connection.beginTransaction(err => {
+      if (err) {
+        console.error('Error starting transaction:', JSON.stringify(err, null, 2));
+        return reject({
           statusCode: 500,
           body: JSON.stringify({
-            message: 'Error adding answer',
-            error: error.message,
-          }),
-        });
-      } else {
-        resolve({
-          statusCode: 201,
-          body: JSON.stringify({
-            message: 'Answer added successfully',
-            answerId: results.insertId,
+            message: 'Error starting transaction',
+            error: err.message,
           }),
         });
       }
+
+      connection.query(insertAnswerQuery, [today, decoded.userId, answer, color, visibility], (error, results) => {
+        if (error) {
+          console.error('Error inserting answer:', JSON.stringify(error, null, 2));
+          return connection.rollback(() => {
+            reject({
+              statusCode: 500,
+              body: JSON.stringify({
+                message: 'Error adding answer',
+                error: error.message,
+              }),
+            });
+          });
+        }
+
+        const answerId = results.insertId;
+        const keywordValues = keywords.map(keyword => [answerId, keyword]);
+
+        connection.query(insertKeywordQuery, [keywordValues], (error) => {
+          if (error) {
+            console.error('Error inserting keywords:', JSON.stringify(error, null, 2));
+            return connection.rollback(() => {
+              reject({
+                statusCode: 500,
+                body: JSON.stringify({
+                  message: 'Error adding keywords',
+                  error: error.message,
+                }),
+              });
+            });
+          }
+
+          connection.commit(err => {
+            if (err) {
+              console.error('Error committing transaction:', JSON.stringify(err, null, 2));
+              return connection.rollback(() => {
+                reject({
+                  statusCode: 500,
+                  body: JSON.stringify({
+                    message: 'Error committing transaction',
+                    error: err.message,
+                  }),
+                });
+              });
+            }
+
+            resolve({
+              statusCode: 201,
+              body: JSON.stringify({
+                message: 'Answer and keywords added successfully',
+                answerId,
+              }),
+            });
+          });
+        });
+      });
     });
   });
 };
