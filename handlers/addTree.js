@@ -1,7 +1,11 @@
 'use strict';
 
+const AWS = require('aws-sdk');
 const { connectToDatabase } = require('../lib/db');
 const { verifyToken } = require('../lib/verifyToken');
+
+const s3 = new AWS.S3();
+const BUCKET_NAME = 'me-dev-serverlessdeploymentbucket-ujmmb8d7yufl';
 
 module.exports.addTree = async (event) => {
   const token = event.headers.Authorization || event.headers.authorization;
@@ -26,39 +30,61 @@ module.exports.addTree = async (event) => {
     };
   }
 
-  const { image_path } = JSON.parse(event.body);
-  if (!image_path) {
+  const { image_data } = JSON.parse(event.body);
+  if (!image_data) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: 'image_path is required',
+        message: 'image_data is required',
       }),
     };
   }
 
-  const query = 'INSERT INTO users (user_id, tree) VALUES (?, ?)';
-  const connection = connectToDatabase();
+  const buffer = Buffer.from(image_data, 'base64');
+  const params = {
+    Bucket: BUCKET_NAME,
+    key: decoded.userId,
+    Body: buffer,
+    ContentType: 'image/jpeg'
+  };
 
-  return new Promise((resolve, reject) => {
-    connection.query(query, [ decoded.userId, image_path], (error, results) => {
-      if (error) {
-        console.error('Error executing query:', JSON.stringify(error, null, 2));
-        reject({
-          statusCode: 500,
-          body: JSON.stringify({
-            message: 'Error adding tree',
-            error: error.message,
-          }),
-        });
-      } else {
-        resolve({
-          statusCode: 201,
-          body: JSON.stringify({
-            message: 'tree added successfully',
-            answerId: results.insertId,
-          }),
-        });
-      }
+  try {
+    await s3.putObject(params).promise();
+    const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${decoded.userId}`;
+
+    const query = 'INSERT INTO users (user_id, tree) VALUES (?, ?)';
+    const connection = await connectToDatabase();
+
+    return new Promise((resolve, reject) => {
+      connection.query(query, [decoded.userId, imageUrl], (error, results) => {
+        if (error) {
+          console.error('Error executing query:', JSON.stringify(error, null, 2));
+          reject({
+            statusCode: 500,
+            body: JSON.stringify({
+              message: 'Error adding tree',
+              error: error.message,
+            }),
+          });
+        } else {
+          resolve({
+            statusCode: 201,
+            body: JSON.stringify({
+              message: 'Tree added successfully',
+              answerId: results.insertId,
+            }),
+          });
+        }
+      });
     });
-  });
+  } catch (error) {
+    console.error('Error uploading image to S3 or saving to DB:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Error uploading image or saving to database',
+        error: error.message,
+      }),
+    };
+  }
 };
