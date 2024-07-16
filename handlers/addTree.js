@@ -31,7 +31,7 @@ module.exports.addTree = async (event) => {
   }
 
   const { image_data } = JSON.parse(event.body);
-  console.log("이미지: ",image_data);
+//   console.log("이미지: ",image_data);
   if (!image_data) {
     return {
       statusCode: 400,
