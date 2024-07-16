@@ -26,9 +26,9 @@ module.exports.deleteFriend = async (event) => {
     };
   }
 
-  const { following_id } = JSON.parse(event.body);
+  const { friendId } = JSON.parse(event.body);
 
-  if (!following_id) {
+  if (!friendId) {
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -41,7 +41,7 @@ module.exports.deleteFriend = async (event) => {
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
-    connection.query(query, [ decoded.userId, following_id], (error, results) => {
+    connection.query(query, [ decoded.userId, friendId], (error, results) => {
       if (error) {
         console.error('Error executing query:', JSON.stringify(error, null, 2));
         reject({
