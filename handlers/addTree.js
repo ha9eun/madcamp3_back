@@ -40,19 +40,21 @@ module.exports.addTree = async (event) => {
       }),
     };
   }
+  const imageName = `${decoded.userId}_tree.jpg`;
 
   const buffer = Buffer.from(image_data, 'base64');
   const params = {
     Bucket: BUCKET_NAME,
-    Key: decoded.userId,
+    Key: imageName,
     Body: buffer,
     ContentType: 'image/jpeg'
   };
 
   try {
-    await s3.putObject(params).promise();
+    const s3Response = await s3.putObject(params).promise();
+    console.log("s3Response: ",s3Response);
     console.log('업로드 완료');
-    const imageUrl = `dc8i0y2u993j2.cloudfront.net/${decoded.userId}`;
+    const imageUrl = `dc8i0y2u993j2.cloudfront.net/${imageName}`;
 
     const query = 'INSERT INTO users (user_id, tree) VALUES (?, ?)';
     const connection = await connectToDatabase();
