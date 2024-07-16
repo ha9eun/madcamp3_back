@@ -179,6 +179,12 @@ functions:
       - httpApi:
           path: /answers/today
           method: get
+  addTree:
+    handler: handlers/addTree.addTree
+    events:
+      - httpApi:
+          path: /users/tree
+          method: post
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
