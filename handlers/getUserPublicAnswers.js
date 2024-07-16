@@ -40,8 +40,8 @@ module.exports.getUserPublicAnswers = async (event) => {
   `;
 
   const followQuery = `
-    SELECT * FROM follows
-    WHERE user_id = ? AND friend_id = ?
+    SELECT * FROM friends
+    WHERE follower_id = ? AND following_id = ?
   `;
 
   const connection = connectToDatabase();
