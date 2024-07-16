@@ -6,10 +6,11 @@ module.exports.getUserPublicAnswers = async (event) => {
   const { user_id } = event.pathParameters;
 
   const query = `
-    SELECT a.answer_id, a.date, q.question, a.answer, a.color, k.keyword
+    SELECT a.answer_id, a.date, q.question, a.answer, a.color, k.keyword, u.nickname
     FROM answers a
     JOIN questions q ON a.date = q.date
     LEFT JOIN keywords k ON a.answer_id = k.answer_id
+    JOIN users u ON a.user_id = u.user_id
     WHERE a.user_id = ? AND a.visibility = 'public'
   `;
   
@@ -38,6 +39,7 @@ module.exports.getUserPublicAnswers = async (event) => {
               question: row.question,
               answer: row.answer,
               color: row.color,
+              nickname: row.nickname,
               keywords: row.keyword ? [row.keyword] : [],
             });
           }
