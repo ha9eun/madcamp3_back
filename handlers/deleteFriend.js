@@ -26,7 +26,7 @@ module.exports.deleteFriend = async (event) => {
     };
   }
 
-  const { friendId } = JSON.parse(event.body);
+  const { friendId } = event.pathParameters;
 
   if (!friendId) {
     return {

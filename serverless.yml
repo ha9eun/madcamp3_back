@@ -135,13 +135,13 @@ functions:
     handler: handlers/addFriend.addFriend
     events:
       - httpApi:
-          path: /friends
+          path: /friends/{friendId}
           method: post
   deleteFriend:
     handler: handlers/deleteFriend.deleteFriend
     events:
       - httpApi:
-          path: /friends
+          path: /friends/{friendId}
           method: delete
   addLike:
     handler: handlers/addLike.addLike
