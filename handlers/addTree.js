@@ -48,7 +48,7 @@ module.exports.addTree = async (event) => {
     Key: imageName,
     Body: buffer,
     ContentType: 'image/jpeg'
-  };
+  };console.log("test");
 
   try {
     const s3Response = await s3.putObject(params).promise();
