@@ -173,6 +173,12 @@ functions:
       - httpApi:
           path: /questions/recent
           method: get
+  getTodayAnswer:
+    handler: handlers/getTodayAnswer.getTodayAnswer
+    events:
+      - httpApi:
+          path: /answers/today
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
