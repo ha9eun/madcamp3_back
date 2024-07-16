@@ -43,7 +43,7 @@ module.exports.addTree = async (event) => {
   const buffer = Buffer.from(image_data, 'base64');
   const params = {
     Bucket: BUCKET_NAME,
-    key: decoded.userId,
+    Key: decoded.userId,
     Body: buffer,
     ContentType: 'image/jpeg'
   };
