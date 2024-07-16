@@ -47,6 +47,10 @@ module.exports.getUserPublicAnswers = async (event) => {
     WHERE a.user_id = ? AND a.visibility = 'public'
   `;
 
+  const likesQuery = `
+    SELECT answer_id FROM likes WHERE user_id = ?
+  `;
+
   const connection = connectToDatabase();
 
   return new Promise((resolve, reject) => {
@@ -88,7 +92,22 @@ module.exports.getUserPublicAnswers = async (event) => {
                 error: error.message,
               }),
             });
-          } else {
+          }
+
+          connection.query(likesQuery, [currentUserId], (likeError, likeResults) => {
+            if (likeError) {
+              console.error('Error retrieving likes:', JSON.stringify(likeError, null, 2));
+              return reject({
+                statusCode: 500,
+                body: JSON.stringify({
+                  message: 'Error retrieving likes',
+                  error: likeError.message,
+                }),
+              });
+            }
+
+            const likedAnswers = new Set(likeResults.map(row => row.answer_id));
+
             const answers = results.reduce((acc, row) => {
               const answer = acc.find(a => a.answer_id === row.answer_id);
               if (answer) {
@@ -101,6 +120,7 @@ module.exports.getUserPublicAnswers = async (event) => {
                   answer: row.answer,
                   color: row.color,
                   keywords: row.keyword ? [row.keyword] : [],
+                  liked: likedAnswers.has(row.answer_id), // 좋아요 여부 추가
                 });
               }
               return acc;
@@ -110,7 +130,7 @@ module.exports.getUserPublicAnswers = async (event) => {
               statusCode: 200,
               body: JSON.stringify({ nickname, isFollowing, answers }),
             });
-          }
+          });
         });
       });
     });
