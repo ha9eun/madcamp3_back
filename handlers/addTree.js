@@ -31,6 +31,7 @@ module.exports.addTree = async (event) => {
   }
 
   const { image_data } = JSON.parse(event.body);
+  console.log("이미지: ",image_data);
   if (!image_data) {
     return {
       statusCode: 400,
@@ -50,7 +51,8 @@ module.exports.addTree = async (event) => {
 
   try {
     await s3.putObject(params).promise();
-    const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${decoded.userId}`;
+    console.log('업로드 완료');
+    const imageUrl = `dc8i0y2u993j2.cloudfront.net/${decoded.userId}`;
 
     const query = 'INSERT INTO users (user_id, tree) VALUES (?, ?)';
     const connection = await connectToDatabase();
