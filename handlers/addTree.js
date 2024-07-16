@@ -1,10 +1,12 @@
 'use strict';
 
-const AWS = require('aws-sdk');
+const {PutObjectCommand, S3Client} = require('@aws-sdk/client-s3');
+
 const { connectToDatabase } = require('../lib/db');
 const { verifyToken } = require('../lib/verifyToken');
 
-const s3 = new AWS.S3();
+const client = new S3Client({});
+
 const BUCKET_NAME = 'me-dev-serverlessdeploymentbucket-ujmmb8d7yufl';
 
 module.exports.addTree = async (event) => {
@@ -43,16 +45,16 @@ module.exports.addTree = async (event) => {
   const imageName = `${decoded.userId}_tree.jpg`;
 
   const buffer = Buffer.from(image_data, 'base64');
-  const params = {
+  const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: imageName,
     Body: buffer,
-    ContentType: 'image/jpeg'
-  };console.log("test");
+  });console.log("test");
 
   try {
-    const s3Response = await s3.putObject(params).promise();
-    console.log("s3Response: ",s3Response);
+    //const s3Response = await s3.putObject(params).promise();
+    const response = await client.send(command);
+
     console.log('업로드 완료');
     const imageUrl = `dc8i0y2u993j2.cloudfront.net/${imageName}`;
 
