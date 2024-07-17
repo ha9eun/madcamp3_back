@@ -28,9 +28,10 @@ module.exports.getFollowing = async (event) => {
   }
 
   const query = `
-    SELECT following_id
-    FROM friends
-    WHERE follower_id = ?
+    SELECT f.following_id, u.nickname
+    FROM friends f
+    JOIN users u ON f.following_id = u.user_id
+    WHERE f.follower_id = ?
   `;
   
   const connection = connectToDatabase();
