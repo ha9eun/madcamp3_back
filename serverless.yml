@@ -185,6 +185,12 @@ functions:
       - httpApi:
           path: /users/tree
           method: post
+  getFriendsTodayAnswers:
+    handler: handlers/getFriendsTodayAnswers.getFriendsTodayAnswers
+    events:
+      - httpApi:
+          path: /friends/today
+          method: get
 plugins:  
   - serverless-offline
   - serverless-dotenv-plugin
