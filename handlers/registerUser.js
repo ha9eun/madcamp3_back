@@ -1,6 +1,7 @@
 'use strict';
 
 const { connectToDatabase } = require('../lib/db');
+const jwt = require('jsonwebtoken');  // jwt 패키지 추가
 
 module.exports.registerUser = async (event) => {
   const { userId, nickname, password } = JSON.parse(event.body);
@@ -54,11 +55,16 @@ module.exports.registerUser = async (event) => {
                 }),
               });
             } else {
+              // 사용자 등록 후 JWT 토큰 생성
+              const token = jwt.sign({ userId: userId }, process.env.JWT_SECRET, {
+                expiresIn: '1h',
+              });
+
               resolve({
                 statusCode: 201,
                 body: JSON.stringify({
                   message: 'User registered successfully',
-                  userId: results.insertId,
+                  token,  // 토큰을 응답에 포함
                 }),
               });
             }
